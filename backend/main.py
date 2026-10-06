@@ -1,10 +1,21 @@
 from fastapi import FastAPI
-from rotas.rotas import clientes      # importa as rotas de clientes
+from fastapi.middleware.cors import CORSMiddleware
+from rotas.rotas import clientes
+from rotas import senioridade
+from rotas import tatuadores
 
 app = FastAPI()
 
-app.include_router(clientes.router)  # registra as rotas de clientes na API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+app.include_router(clientes.router)
+app.include_router(senioridade.router)
+app.include_router(tatuadores.router)
 
 @app.get("/")
 def inicio():
