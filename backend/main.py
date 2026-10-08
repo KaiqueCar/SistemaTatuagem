@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from rotas.rotas import clientes
 from rotas import senioridade
 from rotas import tatuadores
+from rotas import agendamentos
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ app.add_middleware(
 app.include_router(clientes.router)
 app.include_router(senioridade.router)
 app.include_router(tatuadores.router)
+app.include_router(agendamentos.router)
 
 @app.get("/")
 def inicio():
