@@ -1,8 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Tatuadores — Estúdio de Tatuagem</title>
 
@@ -15,21 +17,22 @@
 <body class="container py-4">
 
     <nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container">
-        <span class="navbar-brand">Estúdio de Tatuagem</span>
+        <div class="container">
+            <span class="navbar-brand">Estúdio de Tatuagem</span>
 
-        <div>
-            <a href="clientes.html" class="text-light me-3">Clientes</a>
-            <a href="senioridade.html" class="text-light me-3">Senioridade</a>
-            <a href="tatuadores.html" class="text-light">Tatuadores</a>
-            <a href="agendamentos.html" class="text-light">Agendamentos</a>
+            <div>
+                <a href="clientes.html" class="text-light me-3">Clientes</a>
+                <a href="senioridade.html" class="text-light me-3">Senioridade</a>
+                <a href="estilos.html" class="text-light me-3">Estilos</a>
+                <a href="tatuadores.html" class="text-light me-3">Tatuadores</a>
+                <a href="agendamentos.html" class="text-light">Agendamentos</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
     <h1>Tatuadores</h1>
 
-    <form id="form-tatuador" class="row g-2 mt-2 mb-4">
+    <form id="form-tatuador" class="row g-3 mt-2 mb-4">
 
         <div class="col-md-4">
             <input
@@ -75,7 +78,20 @@
             </select>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-12">
+            <label class="form-label fw-bold">
+                Estilos que domina
+            </label>
+
+            <div
+                id="lista-estilos"
+                class="d-flex flex-wrap gap-3"
+            >
+                <span class="text-muted">Carregando estilos...</span>
+            </div>
+        </div>
+
+        <div class="col-md-3">
             <button
                 id="btn-submit-tatuador"
                 type="submit"
@@ -87,37 +103,32 @@
 
     </form>
 
-    <table class="table table-bordered">
+    <h2 class="h4">Tatuadores cadastrados</h2>
 
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>CPF</th>
-                <th>E-mail</th>
-                <th>Telefone</th>
-                <th>Senioridade</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
 
-        <tbody id="corpo-tabela"></tbody>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>E-mail</th>
+                    <th>Telefone</th>
+                    <th>Senioridade</th>
+                    <th>Estilos</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
 
-    </table>
+            <tbody id="corpo-tabela"></tbody>
+
+        </table>
+    </div>
 
     <script src="js/tatuadores.js"></script>
 
-
-
-
-
-    
-
 </body>
 
-
-
-
-
-
 </html>
+```

@@ -1,11 +1,13 @@
+
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from database import conectar
 
 router = APIRouter()
 
 
+# Modelo de dados do tatuador
 class Tatuador(BaseModel):
     nometatuador: str
     cpf: str
@@ -15,25 +17,45 @@ class Tatuador(BaseModel):
     idsenioridade: int
 
 
+# Modelo com os IDs dos estilos selecionados
+class EstilosDoTatuador(BaseModel):
+    idestilos: List[int]
+
+
+# GET /tatuadores — lista os tatuadores e suas senioridades
+
 @router.get("/tatuadores")
 def listar_tatuadores():
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
 
     cursor.execute("""
-        SELECT tatuador.*, senioridade.nome AS senioridade
+        SELECT
+            tatuador.*,
+            senioridade.nome AS senioridade,
+            GROUP_CONCAT(
+                DISTINCT estilo.descricao
+                ORDER BY estilo.descricao
+                SEPARATOR ', '
+            ) AS estilos
         FROM tatuador
         JOIN senioridade
             ON tatuador.idsenioridade = senioridade.idsenioridade
+        LEFT JOIN tatuador_estilo
+            ON tatuador.idtatuador = tatuador_estilo.idtatuador
+        LEFT JOIN estilo
+            ON tatuador_estilo.idestilo = estilo.idestilo
+        GROUP BY tatuador.idtatuador
     """)
 
     tatuadores = cursor.fetchall()
-
     conn.close()
 
     return tatuadores
 
 
+
+# GET /tatuadores/{id} — busca um tatuador pelo ID
 @router.get("/tatuadores/{id}")
 def buscar_tatuador(id: int):
     conn = conectar()
@@ -45,7 +67,6 @@ def buscar_tatuador(id: int):
     )
 
     tatuador = cursor.fetchone()
-
     conn.close()
 
     if not tatuador:
@@ -54,6 +75,7 @@ def buscar_tatuador(id: int):
     return tatuador
 
 
+# POST /tatuadores — cadastra um tatuador e retorna seu ID
 @router.post("/tatuadores")
 def criar_tatuador(tatuador: Tatuador):
     conn = conectar()
@@ -73,12 +95,18 @@ def criar_tatuador(tatuador: Tatuador):
         )
     )
 
+    novo_id = cursor.lastrowid
+
     conn.commit()
     conn.close()
 
-    return {"mensagem": "Tatuador cadastrado com sucesso"}
+    return {
+        "mensagem": "Tatuador cadastrado com sucesso",
+        "idtatuador": novo_id
+    }
 
 
+# PUT /tatuadores/{id} — atualiza os dados do tatuador
 @router.put("/tatuadores/{id}")
 def atualizar_tatuador(id: int, tatuador: Tatuador):
     conn = conectar()
@@ -110,6 +138,7 @@ def atualizar_tatuador(id: int, tatuador: Tatuador):
     return {"mensagem": "Tatuador atualizado com sucesso"}
 
 
+# DELETE /tatuadores/{id} — exclui um tatuador
 @router.delete("/tatuadores/{id}")
 def deletar_tatuador(id: int):
     conn = conectar()
@@ -136,4 +165,61 @@ def deletar_tatuador(id: int):
         }
 
 
-    
+# GET /tatuadores/{id}/estilos — lista os estilos do tatuador
+@router.get("/tatuadores/{id}/estilos")
+def listar_estilos_do_tatuador(id: int):
+    conn = conectar()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT estilo.idestilo, estilo.descricao
+        FROM tatuador_estilo
+        JOIN estilo
+            ON tatuador_estilo.idestilo = estilo.idestilo
+        WHERE tatuador_estilo.idtatuador = %s
+    """, (id,))
+
+    estilos = cursor.fetchall()
+    conn.close()
+
+    return estilos
+
+
+# PUT /tatuadores/{id}/estilos — substitui os estilos do tatuador
+@router.put("/tatuadores/{id}/estilos")
+def atualizar_estilos_do_tatuador(
+    id: int,
+    dados: EstilosDoTatuador
+):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        # Remove as associações anteriores
+        cursor.execute(
+            "DELETE FROM tatuador_estilo WHERE idtatuador = %s",
+            (id,)
+        )
+
+        # Insere as novas associações
+        for idestilo in dados.idestilos:
+            cursor.execute(
+                """INSERT INTO tatuador_estilo
+                (idtatuador, idestilo, dataestilo)
+                VALUES (%s, %s, CURDATE())""",
+                (id, idestilo)
+            )
+
+        conn.commit()
+        conn.close()
+
+        return {"mensagem": "Estilos atualizados com sucesso"}
+
+    except Exception:
+        conn.rollback()
+        conn.close()
+
+        return {
+            "erro": "Não foi possível atualizar os estilos. "
+                    "Confira se o tatuador e os estilos existem."
+        }

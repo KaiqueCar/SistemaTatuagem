@@ -6,6 +6,7 @@ from rotas.rotas import clientes
 from rotas import senioridade
 from rotas import tatuadores
 from rotas import agendamentos
+from rotas import estilos
 import os
 
 app = FastAPI()
@@ -24,6 +25,7 @@ app.include_router(clientes.router)
 app.include_router(senioridade.router)
 app.include_router(tatuadores.router)
 app.include_router(agendamentos.router)
+app.include_router(estilos.router)
 
 
 @app.get("/")
