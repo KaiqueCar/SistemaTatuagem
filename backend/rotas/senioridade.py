@@ -1,13 +1,17 @@
+
 from fastapi import APIRouter
 from pydantic import BaseModel
 from database import conectar
 
 router = APIRouter()
 
+
 class Senioridade(BaseModel):
     nome: str
 
-@router.get("/senioridade")
+
+# GET /senioridade — lista todas as senioridades
+@router.get("")
 def listar_senioridade():
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
@@ -18,7 +22,9 @@ def listar_senioridade():
     conn.close()
     return senioridades
 
-@router.get("/senioridade/{id}")
+
+# GET /senioridade/{id} — busca uma senioridade
+@router.get("/{id}")
 def buscar_senioridade(id: int):
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
@@ -37,7 +43,9 @@ def buscar_senioridade(id: int):
 
     return senioridade
 
-@router.post("/senioridade")
+
+# POST /senioridade — cadastra uma senioridade
+@router.post("")
 def criar_senioridade(senioridade: Senioridade):
     conn = conectar()
     cursor = conn.cursor()
@@ -52,7 +60,9 @@ def criar_senioridade(senioridade: Senioridade):
 
     return {"mensagem": "Senioridade cadastrada com sucesso"}
 
-@router.put("/senioridade/{id}")
+
+# PUT /senioridade/{id} — atualiza uma senioridade
+@router.put("/{id}")
 def atualizar_senioridade(id: int, senioridade: Senioridade):
     conn = conectar()
     cursor = conn.cursor()
@@ -67,7 +77,9 @@ def atualizar_senioridade(id: int, senioridade: Senioridade):
 
     return {"mensagem": "Senioridade atualizada com sucesso"}
 
-@router.delete("/senioridade/{id}")
+
+# DELETE /senioridade/{id} — exclui uma senioridade
+@router.delete("/{id}")
 def deletar_senioridade(id: int):
     conn = conectar()
     cursor = conn.cursor()

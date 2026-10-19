@@ -23,8 +23,8 @@ class Agendamento(BaseModel):
     status: Optional[str] = None
 
 
-# CADASTRAR AGENDAMENTO
-@router.post("/agendamentos")
+# POST /agendamentos — cadastra um agendamento
+@router.post("")
 def criar_agendamento(agendamento: Agendamento):
     conn = conectar()
     cursor = conn.cursor()
@@ -65,8 +65,8 @@ def criar_agendamento(agendamento: Agendamento):
         conn.close()
 
 
-# LISTAR TODOS OS AGENDAMENTOS
-@router.get("/agendamentos")
+# GET /agendamentos — lista todos os agendamentos
+@router.get("")
 def listar_agendamentos():
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
@@ -107,8 +107,8 @@ def listar_agendamentos():
         conn.close()
 
 
-# BUSCAR UM AGENDAMENTO PELO ID
-@router.get("/agendamentos/{id}")
+# GET /agendamentos/{id} — busca um agendamento
+@router.get("/{id}")
 def buscar_agendamento(id: int):
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
@@ -145,8 +145,8 @@ def buscar_agendamento(id: int):
         conn.close()
 
 
-# ATUALIZAR AGENDAMENTO
-@router.put("/agendamentos/{id}")
+# PUT /agendamentos/{id} — atualiza um agendamento
+@router.put("/{id}")
 def atualizar_agendamento(id: int, agendamento: Agendamento):
     conn = conectar()
     cursor = conn.cursor()
@@ -191,17 +191,15 @@ def atualizar_agendamento(id: int, agendamento: Agendamento):
 
         conn.commit()
 
-        return {
-            "mensagem": "Agendamento atualizado com sucesso"
-        }
+        return {"mensagem": "Agendamento atualizado com sucesso"}
 
     finally:
         cursor.close()
         conn.close()
 
 
-# EXCLUIR AGENDAMENTO
-@router.delete("/agendamentos/{id}")
+# DELETE /agendamentos/{id} — exclui um agendamento
+@router.delete("/{id}")
 def deletar_agendamento(id: int):
     conn = conectar()
     cursor = conn.cursor()
@@ -220,23 +218,23 @@ def deletar_agendamento(id: int):
 
         conn.commit()
 
-        return {
-            "mensagem": "Agendamento deletado com sucesso"
-        }
+        return {"mensagem": "Agendamento deletado com sucesso"}
 
     finally:
         cursor.close()
         conn.close()
 
 
-# ENVIAR IMAGEM DO DESENHO APROVADO
-@router.post("/agendamentos/{id}/desenho")
+# POST /agendamentos/{id}/desenho — envia a imagem do desenho
+@router.post("/{id}/desenho")
 async def upload_desenho(
     id: int,
     arquivo: UploadFile = File(...)
 ):
-    # Verifica se o arquivo enviado é uma imagem
-    if not arquivo.content_type or not arquivo.content_type.startswith("image/"):
+    if (
+        not arquivo.content_type
+        or not arquivo.content_type.startswith("image/")
+    ):
         await arquivo.close()
         raise HTTPException(
             status_code=400,
@@ -259,15 +257,13 @@ async def upload_desenho(
                 detail="Agendamento não encontrado"
             )
 
-        # Pega apenas o nome do arquivo, evitando caminhos enviados pelo usuário
+        # Evita caminhos enviados no nome do arquivo
         nome_original = os.path.basename(arquivo.filename or "desenho")
 
-        # Cria um nome único para o arquivo
         extensao = os.path.splitext(nome_original)[1].lower()
         nome_arquivo = f"{id}_desenho{extensao}"
         caminho = os.path.join(PASTA_UPLOADS, nome_arquivo)
 
-        # Salva a imagem na pasta uploads
         conteudo = await arquivo.read()
 
         if not conteudo:
@@ -279,7 +275,6 @@ async def upload_desenho(
         with open(caminho, "wb") as imagem:
             imagem.write(conteudo)
 
-        # Guarda o nome da imagem no banco de dados
         cursor.execute(
             """
             UPDATE agendamento
