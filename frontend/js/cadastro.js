@@ -1,6 +1,9 @@
 
 const API = 'http://127.0.0.1:8000';
 
+// Impede o acesso à página sem login
+protegerPagina();
+
 const formCadastro = document.getElementById('form-cadastro');
 const mensagem = document.getElementById('mensagem');
 const botaoCadastrar = document.getElementById('botao-cadastrar');
@@ -19,7 +22,7 @@ formCadastro.addEventListener('submit', async (e) => {
     botaoCadastrar.textContent = 'Cadastrando...';
 
     try {
-        const resposta = await fetch(`${API}/usuarios`, {
+        const resposta = await fetchAutenticado(`${API}/usuarios`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,13 +33,13 @@ formCadastro.addEventListener('submit', async (e) => {
         const resultado = await resposta.json();
 
         if (resposta.ok) {
-            mensagem.textContent = 'Cadastro realizado com sucesso!';
+            mensagem.textContent = 'Funcionário cadastrado com sucesso!';
             mensagem.style.color = '#65d98b';
 
             formCadastro.reset();
 
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = 'dashboard.html';
             }, 1500);
         } else {
             mensagem.textContent =

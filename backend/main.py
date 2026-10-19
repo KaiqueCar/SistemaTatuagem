@@ -1,7 +1,9 @@
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+
+from seguranca import verificar_token, verificar_admin
 
 from rotas.rotas import clientes
 from rotas import (
@@ -28,59 +30,56 @@ app.add_middleware(
 )
 
 os.makedirs("uploads", exist_ok=True)
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
-app.mount(
-    "/uploads",
-    StaticFiles(directory="uploads"),
-    name="uploads"
-)
+# Rotas públicas
+app.include_router(login.router, tags=["Login"])
 
-# Login e cadastro primeiro na documentação
-app.include_router(
-    login.router,
-    tags=["Login"]
-)
-
+# Rota de usuários: somente administradores
 app.include_router(
     usuarios.router,
     prefix="/usuarios",
-    tags=["Usuários"]
+    tags=["Usuários"],
+    dependencies=[Depends(verificar_admin)]
 )
 
-# Demais rotas
+# Rotas protegidas: exigem token JWT válido
 app.include_router(
     clientes.router,
     prefix="/clientes",
-    tags=["Clientes"]
+    tags=["Clientes"],
+    dependencies=[Depends(verificar_token)]
 )
 
 app.include_router(
     senioridade.router,
     prefix="/senioridade",
-    tags=["Senioridade"]
+    tags=["Senioridade"],
+    dependencies=[Depends(verificar_token)]
 )
 
 app.include_router(
     estilos.router,
     prefix="/estilos",
-    tags=["Estilos"]
+    tags=["Estilos"],
+    dependencies=[Depends(verificar_token)]
 )
 
 app.include_router(
     tatuadores.router,
     prefix="/tatuadores",
-    tags=["Tatuadores"]
+    tags=["Tatuadores"],
+    dependencies=[Depends(verificar_token)]
 )
 
 app.include_router(
     agendamentos.router,
     prefix="/agendamentos",
-    tags=["Agendamentos"]
+    tags=["Agendamentos"],
+    dependencies=[Depends(verificar_token)]
 )
 
 
 @app.get("/")
 def inicio():
-    return {
-        "mensagem": "API do estúdio de tatuagem funcionando!"
-    }
+    return {"mensagem": "API do estúdio de tatuagem funcionando!"}

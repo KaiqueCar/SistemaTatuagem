@@ -1,15 +1,15 @@
-```html
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Tatuadores — Estúdio de Tatuagem</title>
 
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
 </head>
@@ -25,7 +25,15 @@
                 <a href="senioridade.html" class="text-light me-3">Senioridade</a>
                 <a href="estilos.html" class="text-light me-3">Estilos</a>
                 <a href="tatuadores.html" class="text-light me-3">Tatuadores</a>
-                <a href="agendamentos.html" class="text-light">Agendamentos</a>
+                <a href="agendamentos.html" class="text-light me-3">Agendamentos</a>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-light btn-sm"
+                    onclick="sair()"
+                >
+                    Sair
+                </button>
             </div>
         </div>
     </nav>
@@ -126,9 +134,12 @@
         </table>
     </div>
 
+    <script src="js/auth.js"></script>
     <script src="js/tatuadores.js"></script>
 
-</body>
+    <script>
+        protegerPagina();
+    </script>
 
+</body>
 </html>
-```

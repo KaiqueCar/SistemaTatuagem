@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar conta | Ink Studio</title>
+    <title>Novo funcionário | Ink Studio</title>
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -91,13 +91,13 @@
 <body>
     <main class="cadastro-card">
         <div class="text-center mb-4">
-            <a href="index.html" class="logo text-decoration-none">
+            <a href="dashboard.html" class="logo text-decoration-none">
                 INK<span class="destaque">.</span>STUDIO
             </a>
 
-            <h1 class="h3 mt-4">Criar conta</h1>
+            <h1 class="h3 mt-4">Novo funcionário</h1>
             <p class="subtitulo">
-                Preencha os dados para se cadastrar no sistema.
+                Preencha os dados para cadastrar um funcionário no sistema.
             </p>
         </div>
 
@@ -108,7 +108,7 @@
                     type="text"
                     id="nome"
                     class="form-control"
-                    placeholder="Digite seu nome"
+                    placeholder="Digite o nome completo"
                     maxlength="100"
                     autocomplete="name"
                     required
@@ -121,7 +121,7 @@
                     type="email"
                     id="email"
                     class="form-control"
-                    placeholder="voce@exemplo.com"
+                    placeholder="funcionario@exemplo.com"
                     maxlength="150"
                     autocomplete="email"
                     required
@@ -143,25 +143,28 @@
                 </small>
             </div>
 
-            <button type="submit" id="botao-cadastrar"
-                class="btn btn-cadastrar w-100">
-                Criar minha conta
+            <button
+                type="submit"
+                id="botao-cadastrar"
+                class="btn btn-cadastrar w-100"
+            >
+                Cadastrar funcionário
             </button>
 
-            <p id="mensagem" class="mt-3 mb-0 text-center"
-                role="status" aria-live="polite"></p>
+            <p
+                id="mensagem"
+                class="mt-3 mb-0 text-center"
+                role="status"
+                aria-live="polite"
+            ></p>
         </form>
 
         <p class="text-center mt-4 mb-0">
-            Já tem conta?
-            <a href="login.html">Entrar</a>
-        </p>
-
-        <p class="text-center mt-3 mb-0">
-            <a href="index.html">Voltar para o início</a>
+            <a href="dashboard.html">Voltar ao painel</a>
         </p>
     </main>
 
+    <script src="js/auth.js"></script>
     <script src="js/cadastro.js"></script>
 </body>
 </html>

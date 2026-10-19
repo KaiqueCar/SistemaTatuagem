@@ -1,88 +1,115 @@
-
+```html
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Estilos — Estúdio de Tatuagem</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estilos — Estúdio de Tatuagem</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 </head>
 
-<body class="container py-4">
+<body>
 
-  <nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container">
-      <span class="navbar-brand">Estúdio de Tatuagem</span>
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container">
+            <span class="navbar-brand">Estúdio de Tatuagem</span>
 
-      <div>
-        <a href="clientes.html" class="text-light me-3">Clientes</a>
-        <a href="senioridade.html" class="text-light me-3">Senioridade</a>
-        <a href="estilos.html" class="text-light me-3">Estilos</a>
-        <a href="tatuadores.html" class="text-light me-3">Tatuadores</a>
-        <a href="agendamentos.html" class="text-light">Agendamentos</a>
-      </div>
-    </div>
-  </nav>
+            <div>
+                <a href="clientes.html" class="text-light me-3">Clientes</a>
+                <a href="senioridade.html" class="text-light me-3">Senioridade</a>
+                <a href="estilos.html" class="text-light me-3">Estilos</a>
+                <a href="tatuadores.html" class="text-light me-3">Tatuadores</a>
+                <a href="agendamentos.html" class="text-light me-3">Agendamentos</a>
 
-  <h1>Estilos de tatuagem</h1>
-  <p class="text-muted">
-    Cadastre, consulte, edite e exclua os estilos oferecidos pelo estúdio.
-  </p>
+                <button
+                    type="button"
+                    class="btn btn-outline-light btn-sm"
+                    onclick="sair()"
+                >
+                    Sair
+                </button>
+            </div>
+        </div>
+    </nav>
 
-  <form id="form-estilo" class="row g-2 mt-3 mb-4">
-    <div class="col-md-6">
-      <label for="descricao" class="form-label">Descrição do estilo</label>
-      <input
-        type="text"
-        id="descricao"
-        class="form-control"
-        placeholder="Ex.: Blackwork"
-        required
-      >
-    </div>
+    <main class="container py-4">
 
-    <div class="col-md-3 d-flex align-items-end">
-      <button
-        id="btn-submit-estilo"
-        type="submit"
-        class="btn btn-primary w-100"
-      >
-        Cadastrar
-      </button>
-    </div>
+        <h1>Estilos de tatuagem</h1>
 
-    <div class="col-md-3 d-flex align-items-end">
-      <button
-        type="button"
-        class="btn btn-secondary w-100"
-        onclick="limparFormulario()"
-      >
-        Limpar
-      </button>
-    </div>
-  </form>
+        <p class="text-muted">
+            Cadastre, consulte, edite e exclua os estilos oferecidos pelo estúdio.
+        </p>
 
-  <h2 class="h4">Estilos cadastrados</h2>
+        <form id="form-estilo" class="row g-2 mt-3 mb-4">
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped align-middle">
-      <thead class="table-dark">
-        <tr>
-          <th>ID</th>
-          <th>Descrição</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
+            <div class="col-md-6">
+                <label for="descricao" class="form-label">
+                    Descrição do estilo
+                </label>
 
-      <tbody id="corpo-tabela">
-      </tbody>
-    </table>
-  </div>
+                <input
+                    type="text"
+                    id="descricao"
+                    class="form-control"
+                    placeholder="Ex.: Blackwork"
+                    required
+                >
+            </div>
 
-  <script src="js/estilos.js"></script>
+            <div class="col-md-3 d-flex align-items-end">
+                <button
+                    id="btn-submit-estilo"
+                    type="submit"
+                    class="btn btn-primary w-100"
+                >
+                    Cadastrar
+                </button>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+                <button
+                    type="button"
+                    class="btn btn-secondary w-100"
+                    onclick="limparFormulario()"
+                >
+                    Limpar
+                </button>
+            </div>
+
+        </form>
+
+        <h2 class="h4">Estilos cadastrados</h2>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="corpo-tabela"></tbody>
+
+            </table>
+        </div>
+
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/estilos.js"></script>
+
+    <script>
+        protegerPagina();
+    </script>
 
 </body>
 </html>
+```
