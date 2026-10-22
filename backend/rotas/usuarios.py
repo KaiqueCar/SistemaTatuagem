@@ -1,5 +1,6 @@
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from seguranca import verificar_admin
 from pydantic import BaseModel, EmailStr
 from database import conectar
 import bcrypt
@@ -13,7 +14,7 @@ class Usuario(BaseModel):
     senha: str
 
 
-@router.post("")
+@router.post("", dependencies=[Depends(verificar_admin)])
 def criar_usuario(usuario: Usuario):
     senha_hash = bcrypt.hashpw(
         usuario.senha.encode("utf-8"),
